@@ -20,27 +20,32 @@ read_file(Stream,[X|L]) :-
 				%Dict
 lookup(Sentence,  PredictedWord):-
 %	reverse(Sentence, ReversedSentence),
-	findTrigramsRecursive(Sentence , [
+	findTrigrams(Sentence , [
 ['Hallo','Welt','was',10],
 ['Hallo','Bucks','wie',20],
 ['Hallo','Welt','wie',30],
 ['Hallo','Bucks','wann',40],
 ['Hallo','Micha','was',50],
 ['Tschüs','Micha','bla',60],
-['Tschüs','Bucks','bla',70]
+['Tschüs','Bucks','bla',70],
+['Hallo','Bucks','bla',80]
 ] , PredictedWord).
 
-%			 Liste mit zwei Wörtern, werden über Console mit lookup(['Blaa','Blub'], ...) rein gereicht
-%							Dictionary mit Trigrammen sowie deren Wahrscheinlichkeit [[1,2,3,Prop],[1, 2,3,Prop],...]
-%																					Return Liste  mit möglichen Wörtern so wie deren Wahrscheinlichkeit 
-findTrigramsRecursive(WordList,[],[]).
-findTrigramsRecursive([Word, Word2], [[Word,Word2|RestDictEntry]|Dict], [RestDictEntry|ReturnList]):-
-	findTrigramsRecursive([Word,Word2],Dict,ReturnList).
-findTrigramsRecursive([Word|RestWord], [[DictWord|RestDictEntry]|Dict], ReturnList):-
-	findTrigramsRecursive([Word,Word2],Dict,ReturnList).
+%						 Liste mit zwei Wörtern, werden über Console mit lookup(['Blaa','Blub'], ...) rein gereicht
+%									Dictionary mit Trigrammen sowie deren Wahrscheinlichkeit [[1,2,3,Prop],[1, 2,3,Prop],...]
+%																		Return Liste  mit möglichen Wörtern so wie deren Wahrscheinlichkeit 
+findTrigrams(WordList,[],[]).
+findTrigrams([Word, Word2], [[Word,Word2|RestDictEntry]|Dict], [RestDictEntry|ReturnList]):-
+	findTrigrams([Word,Word2], Dict, ReturnList).
+findTrigrams([Word,Word2|RestWord], [[DictWord,DictWord2|RestDictEntry]|Dict], ReturnList):-
+	findTrigrams([Word,Word2], Dict, ReturnList).
+%findTrigrams([Word,Word2|RestWord], [[DictWord,Word2|RestDictEntry]|Dict], ReturnList):-
+%	findTrigrams([Word,Word2], Dict, ReturnList).
 
 
-findBigrams([Word], [[DictWord, DictWord2, DictProp] | Dict], [[ReurnWord|ReturnProp]| ReturnList]):-
-	(Word = DictWort -> ReturnWord = DictWord2, ReturnProp = DictProp; true).
-
+findBigrams([Word],[],[]).
+findBigrams([Word], [[Word|RestDictEntry]|Dict], [RestDictEntry|ReturnList]):-
+	findBigrams([Word], Dict, ReturnList).
+findBigrams([Word],[[DictWord|DictWordRest]| Dict],ReturnList):-
+	findBigrams([Word], Dict, Returnlist).
 %['Hallo'-['Welt'],['Bucks'-['wie']]]
