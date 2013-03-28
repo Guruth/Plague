@@ -20,7 +20,7 @@ read_file(Stream,[X|L]) :-
 				%Dict
 lookup(Sentence,  PredictedWord):-
 %	reverse(Sentence, ReversedSentence),
-	findTrigrams(Sentence , [
+	findTrigramsRecursive(Sentence , [
 ['Hallo','Welt','was',10],
 ['Hallo','Bucks','wie',20],
 ['Hallo','Welt','wie',30],
@@ -33,16 +33,14 @@ lookup(Sentence,  PredictedWord):-
 %			 Liste mit zwei Wörtern, werden über Console mit lookup(['Blaa','Blub'], ...) rein gereicht
 %							Dictionary mit Trigrammen sowie deren Wahrscheinlichkeit [[1,2,3,Prop],[1, 2,3,Prop],...]
 %																					Return Liste  mit möglichen Wörtern so wie deren Wahrscheinlichkeit 
-findTrigrams([Word , Word2], [] , ReturnList):-true.
-findTrigrams([Word,Word2] , [[DictWord , DictWord2, DictWord3, DictProp] | Dict] ,[[ReturnWord, ReturnProp]|ReturnList]) :-
-	(=(Word,DictWord) -> %if
-		print('if\n'),(=(Word2,DictWord2) -> %then if
-			print('ifthen ' +DictProp +'\n'),ReturnWord = DictWord3 , ReturnProp = DictProp,findTrigrams([Word,Word2], Dict ,ReturnList); %then
-			print('ifelse\n'),findTrigrams([Word,Word2], Dict ,ReturnList)) ; %else
-		findTrigrams([Word,Word2], Dict ,ReturnList)). %else
+findTrigramsRecursive(WordList,[],[]).
+findTrigramsRecursive([Word, Word2], [[Word,Word2|RestDictEntry]|Dict], [RestDictEntry|ReturnList]):-
+	findTrigramsRecursive([Word,Word2],Dict,ReturnList).
+findTrigramsRecursive([Word|RestWord], [[DictWord|RestDictEntry]|Dict], ReturnList):-
+	findTrigramsRecursive([Word,Word2],Dict,ReturnList).
+
 
 findBigrams([Word], [[DictWord, DictWord2, DictProp] | Dict], [[ReurnWord|ReturnProp]| ReturnList]):-
 	(Word = DictWort -> ReturnWord = DictWord2, ReturnProp = DictProp; true).
-
 
 %['Hallo'-['Welt'],['Bucks'-['wie']]]
