@@ -1,3 +1,5 @@
+% Handling large lists of data http://www.swi-prolog.org/pldoc/package/table.html
+%
 autoComplete(Sentence,  Return):-
     openBigrams(BigramHandle),
     openTrigrams(TrigramHandle),
@@ -5,8 +7,6 @@ autoComplete(Sentence,  Return):-
     findTrigrams(TrigramHandle,Sentence,Trigrams),
     calculateProps(Bigram, Trigrams, ReturnWords),
     findHighestProp(ReturnWords,Return).
-
-% Handling large lists of data http://www.swi-prolog.org/pldoc/package/table.html
 
 openBigrams(Handle):-
     new_table(
