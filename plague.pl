@@ -1,5 +1,6 @@
 % Handling large lists of data http://www.swi-prolog.org/pldoc/package/table.html
-%
+% Word lists from : http://www.ngrams.info/
+% This could be a little bit overpowered : http://storage.googleapis.com/books/ngrams/books/datasetsv2.html
 autoComplete(Sentence,  Return):-
     openBigrams(BigramHandle),
     openTrigrams(TrigramHandle),
