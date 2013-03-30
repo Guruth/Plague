@@ -2,9 +2,12 @@
 % Word lists from : http://www.ngrams.info/
 % This could be a little bit overpowered : http://storage.googleapis.com/books/ngrams/books/datasetsv2.html
 
+%TODO:
+% Not found Input?
+
 startAutoComplete:-
-    openBigrams(BigramHandle),
-    openTrigrams(TrigramHandle),
+    openBigramFile(BigramHandle),
+    openTrigramFile(TrigramHandle),
     read(Word),
     inputLoop(Word,Word,BigramHandle,TrigramHandle).
 
@@ -17,8 +20,8 @@ inputLoop(Sentence, OldWord, BigramHandle, TrigramHandle):-
     inputLoop(TotalyNewSentence, NewWord, BigramHandle, TrigramHandle).
 
 autoComplete(Sentence, Return):-
-    openBigrams(BigramHandle),
-    openTrigrams(TrigramHandle),
+    openBigramFile(BigramHandle),
+    openTrigramFile(TrigramHandle),
     findBigram(BigramHandle,Sentence,Bigram),
     findTrigrams(TrigramHandle,Sentence,Trigrams),
     calculateProps(Bigram, Trigrams, ReturnWords),
@@ -30,13 +33,13 @@ autoComplete(Sentence, BigramHandle, TrigramHandle, Return):-
     calculateProps(Bigram, Trigrams, ReturnWords),
     findHighestProp(ReturnWords,Return).
 
-openBigrams(Handle):-
+openBigramFile(Handle):-
     new_table(
         'wordlists/w2_.txt', 
         [count(integer), word(string), word2(string)], 
         [],
         Handle).
-openTrigrams(Handle):-
+openTrigramFile(Handle):-
     new_table(
         'wordlists/w3_.txt', 
         [count(integer), word(string), word2(string), word3(string)], 
