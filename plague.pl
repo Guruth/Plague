@@ -3,29 +3,21 @@
 % This could be a little bit overpowered : http://storage.googleapis.com/books/ngrams/books/datasetsv2.html
 
 %TODO:
-% Not found Input?
+% Not found n-grams found?
 
-startAutoComplete:-
+start:-
     openBigramFile(BigramHandle),
     openTrigramFile(TrigramHandle),
     read(Word),
     inputLoop(Word,Word,BigramHandle,TrigramHandle).
 
-inputLoop(Sentence, OldWord, BigramHandle, TrigramHandle):-
+inputLoop(OldSentence, OldWord, BigramHandle, TrigramHandle):-
     read(NewWord),
     autoComplete([OldWord, NewWord], BigramHandle, TrigramHandle, AutoCompletedWord),
-    string_concat(Sentence, ' ', NewSentence),
-    string_concat(NewSentence, NewWord, TotalyNewSentence),
-    write(TotalyNewSentence),write(AutoCompletedWord),nl,
-    inputLoop(TotalyNewSentence, NewWord, BigramHandle, TrigramHandle).
-
-autoComplete(Sentence, Return):-
-    openBigramFile(BigramHandle),
-    openTrigramFile(TrigramHandle),
-    findBigram(BigramHandle,Sentence,Bigram),
-    findTrigrams(TrigramHandle,Sentence,Trigrams),
-    calculateProps(Bigram, Trigrams, ReturnWords),
-    findHighestProp(ReturnWords,Return).
+    string_concat(OldSentence, ' ', Sentence),
+    string_concat(Sentence, NewWord, NewSentence),
+    write(NewSentence),write(AutoCompletedWord),nl,
+    inputLoop(NewSentence, NewWord, BigramHandle, TrigramHandle).
 
 autoComplete(Sentence, BigramHandle, TrigramHandle, Return):-
     findBigram(BigramHandle,Sentence,Bigram),
@@ -74,6 +66,14 @@ compareWords([Word,Prop],[CompWord,CompProp],[ReturnWord,ReturnProp]):-
     ReturnWord = Word, ReturnProp = Prop ;
     ReturnWord = CompWord, ReturnProp = CompProp ).
 
+
+%autoComplete(Sentence, Return):-
+%    openBigramFile(BigramHandle),
+%    openTrigramFile(TrigramHandle),
+%    findBigram(BigramHandle,Sentence,Bigram),
+%    findTrigrams(TrigramHandle,Sentence,Trigrams),
+%    calculateProps(Bigram, Trigrams, ReturnWords),
+%    findHighestProp(ReturnWords,Return).
 
 
 
