@@ -16,7 +16,7 @@ inputLoop(OldSentence, OldWord, BigramHandle, TrigramHandle):-
     autoComplete([OldWord, NewWord], BigramHandle, TrigramHandle, AutoCompletedWord),
     string_concat(OldSentence, ' ', Sentence),
     string_concat(Sentence, NewWord, NewSentence),
-    write(NewSentence),write(AutoCompletedWord),nl,
+    printLine([NewSentence,AutoCompletedWord]),
     inputLoop(NewSentence, NewWord, BigramHandle, TrigramHandle).
 
 autoComplete(Sentence, BigramHandle, TrigramHandle, Return):-
@@ -31,6 +31,7 @@ openBigramFile(Handle):-
         [count(integer), word(string), word2(string)], 
         [],
         Handle).
+
 openTrigramFile(Handle):-
     new_table(
         'wordlists/w3_.txt', 
@@ -51,10 +52,12 @@ findTrigrams(Handle,[Word,Word2], ReturnList):-
         ReturnList).
 
 calculateProps(_Sentence,[],[]).
-calculateProps([[BiWord,BiWord2,BiCount]],[[_TriWord, _TriWord2, TriWord3,TriCount]| TriList],[[TriWord3,Prop]|ReturnList]):-
-   calculateProps([[BiWord,BiWord2,BiCount]],TriList,ReturnList),
+calculateProps([[BiWord,BiWord2,BiCount]], [[_TriWord, _TriWord2, TriWord3,TriCount]| TriList], [[TriWord3,Prop]|ReturnList]):-
+    calculateProps([[BiWord,BiWord2,BiCount]],TriList,ReturnList),
     Prop is TriCount/BiCount.
 
+findHighestProp([],Word):-
+    Word = '[Word combination not in knowledge base]'.
 findHighestProp([Word],Word).
 findHighestProp([Word|RestList], Return):-
     findHighestProp(RestList,Rec),
@@ -66,6 +69,12 @@ compareWords([Word,Prop],[CompWord,CompProp],[ReturnWord,ReturnProp]):-
     ReturnWord = Word, ReturnProp = Prop ;
     ReturnWord = CompWord, ReturnProp = CompProp ).
 
+printLine([]):-
+    nl.
+printLine([Sentence|Rest]):-
+    write(Sentence),
+    write(' '),
+    printLine(Rest).
 
 %autoComplete(Sentence, Return):-
 %    openBigramFile(BigramHandle),
