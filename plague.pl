@@ -1,9 +1,4 @@
-% Handling large lists of data http://www.swi-prolog.org/pldoc/package/table.html
 % Word lists from : http://www.ngrams.info/
-% This could be a little bit overpowered : http://storage.googleapis.com/books/ngrams/books/datasetsv2.html
-
-%TODO:
-% Not found n-grams found?
 
 start:-
     openBigramFile(BigramHandle),
@@ -75,31 +70,3 @@ printLine([Sentence|Rest]):-
     write(Sentence),
     write(' '),
     printLine(Rest).
-
-%autoComplete(Sentence, Return):-
-%    openBigramFile(BigramHandle),
-%    openTrigramFile(TrigramHandle),
-%    findBigram(BigramHandle,Sentence,Bigram),
-%    findTrigrams(TrigramHandle,Sentence,Trigrams),
-%    calculateProps(Bigram, Trigrams, ReturnWords),
-%    findHighestProp(ReturnWords,Return).
-
-
-
-%						 Liste mit zwei Wörtern, werden über Console mit lookup(['Blaa','Blub'], ...) rein gereicht
-%									Dictionary mit Trigrammen sowie deren Wahrscheinlichkeit [[1,2,3,Prop],[1, 2,3,Prop],...]
-%																		Return Liste  mit möglichen Wörtern so wie deren Wahrscheinlichkeit 
-%findHighestTrigrams(WordList,[],[]).
-%findHighestTrigrams([Word, Word2], [[Word,Word2|RestDictEntry]|Dict], [RestDictEntry|ReturnList]):-
-%	findHighestTrigrams([Word,Word2], Dict, ReturnList).
-%findHighestTrigrams([Word,Word2|RestWord], [[DictWord,DictWord2|RestDictEntry]|Dict], ReturnList):-
-%	findHighestTrigrams([Word,Word2], Dict, ReturnList).
-%findTrigrams([Word,Word2|RestWord], [[DictWord,Word2|RestDictEntry]|Dict], ReturnList):-
-%	findTrigrams([Word,Word2], Dict, ReturnList).
-
-
-%findHighestBigrams([Word],[],[]).
-%findHighestBigrams([Word], [[Word|RestDictEntry]|Dict], [RestDictEntry|ReturnList]):-
-%	findHighestBigrams([Word], Dict, ReturnList).
-%findHighestBigrams([Word],[[DictWord|DictWordRest]| Dict],ReturnList):-
-%	findHighestBigrams([Word], Dict, Returnlist).
