@@ -1,4 +1,14 @@
-% Word lists from : http://www.ngrams.info/
+% Plague - a prolog word auto completion
+%
+% Written by Alexander Rust & Kai Weller
+% 
+% Word lists can be aquired from : http://www.ngrams.info/
+% Free samples are good enough, but require registration
+% Should be packed to Plague/wordlists
+%
+% Wordlists must have the format :
+% Count Word Word [Word] 
+
 % [1] http://www.swi-prolog.org/pldoc/package/table.html
 
 start:-
