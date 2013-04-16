@@ -4,7 +4,7 @@
 % 
 % Word lists can be aquired from : http://www.ngrams.info/
 % Free samples are good enough, but require registration
-% Should be packed to Plague/wordlists
+% Should be packed to Plague/wordlists/
 %
 % Wordlists must have the format :
 % Count Word Word [Word] 
