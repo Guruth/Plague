@@ -1,4 +1,4 @@
-% Plague - a prolog word auto completion
+% Plague - a Prolog word auto completion
 %
 % Written by Alexander Rust & Kai Weller
 % 
