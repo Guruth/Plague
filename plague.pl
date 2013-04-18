@@ -2,21 +2,45 @@
 %
 % Written by Alexander Rust & Kai Weller
 % 
-% Word lists can be aquired from : http://www.ngrams.info/
+
+% Prerequisites:
+% Word lists must have the format: Count Word Word [Word] 
+% Currently, two wordlists are bundled with the source. 
+
+% Different word lists can be aquired from : http://www.ngrams.info/
 % Free samples are good enough, but require registration
 % Should be packed to Plague/wordlists/
-%
-% Wordlists must have the format :
-% Count Word Word [Word] 
 
+% Usage: 
+% Consult the file and call the function 'start/0'. 
+% Afterwards, words can be inputted by enterting the word followed by a . and pressing enter. 
+% Note, that currently only lower-case words are supported. 
+% After two words, completions and their probability are suggested automatically. 
+
+% Sample input: 
+% ?- consult(plague).
+% % plague compiled 0.00 sec, 17 clauses
+% true.
+% ?- start.
+% |: this.
+% |: is.
+% this is [a,0.16518969216948529]
+% |: a.
+% this is a [very,0.026205563017224095]
+% |: ...
+
+% References:
 % [1] http://www.swi-prolog.org/pldoc/package/table.html
 
+% Starts the completion
 start:-
     openBigramFile(BigramHandle),
     openTrigramFile(TrigramHandle),
     read(Word),
     inputLoop(Word,Word,BigramHandle,TrigramHandle).
 
+% Main loop for continous input of words. 
+% Reads words, gets most likely next word, prints it and reads next word.  
 inputLoop(OldSentence, OldWord, BigramHandle, TrigramHandle):-
     read(NewWord),
     autoComplete([OldWord, NewWord], BigramHandle, TrigramHandle, AutoCompletedWord),
@@ -25,13 +49,15 @@ inputLoop(OldSentence, OldWord, BigramHandle, TrigramHandle):-
     printLine([NewSentence,AutoCompletedWord]),
     inputLoop(NewSentence, NewWord, BigramHandle, TrigramHandle).
 
+% Returns the most probable next word according the the current sentence based on the information contained 
+% in the word lists
 autoComplete(Sentence, BigramHandle, TrigramHandle, Return):-
     findBigram(BigramHandle,Sentence,Bigram),
     findTrigrams(TrigramHandle,Sentence,Trigrams),
     calculateProps(Bigram, Trigrams, ReturnWords),
     findHighestProp(ReturnWords,Return).
 
-% Open Tables containing  2-/3- grams using the prolog table handling mechanism (see [1])
+% Open word lists containing  2-/3- grams using the prolog table handling mechanism (see [1])
 % Returns the File Handle used in findBi/Trigram(...)
 openBigramFile(Handle):-
     new_table(
